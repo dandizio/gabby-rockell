@@ -275,9 +275,13 @@
                 responseMsg: ""
             },
             "2026-07-25": {
-                question: "What is your dream date for tonight? Get as detailed as possible. (No Guarantees)",
+                question: "What is your dream date? Get as detailed as possible.",
                 responseMsg: ""
-            }
+            },
+				 "2026-07-26": {
+                question: "What is your favorite Train song?",
+                responseMsg: "Mine is Drops of Jupiter"
+            },
         };
 
         // Multiple choice questions -> Daily Trivia
@@ -418,7 +422,7 @@
                 feedbackEl.style.color = "#059669";
 
                 // Secret background send straight to your Google Sheet!
-                fetch("https://script.google.com/macros/s/AKfycbxKv-29wl3W1WoXcvwIOaR1gvTiKYyb3uc8wW9AiZVDy9ozfDSx9LVRMrBooWU-6etNKA/exec", {
+                fetch("https://script.google.com/macros/s/AKfycbxnwm4cIU8yC48pmFFLgN-HNoSqVmgo9b1PIcfU13fsPuNGPbyL3GGUaz8go9YqpQ5Abg/exec", {
                     method: "POST",
                     headers: { "Content-Type": "text/plain" },
                     body: JSON.stringify({
