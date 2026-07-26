@@ -168,7 +168,7 @@
     <!-- 1. Days Together Section (Compact & Placed First) -->
     <div class="card days-card">
         <h2>We've Been Together For ❤️</h2>
-        <h1 id="days-count">0</h1>
+        <h1 id="days-count">0 days</h1>
         <p>and counting!</p>
     </div>
 
@@ -278,7 +278,7 @@
                 question: "What is your dream date? Get as detailed as possible.",
                 responseMsg: ""
             },
-				 "2026-07-26": {
+            "2026-07-26": {
                 question: "What is your favorite Train song?",
                 responseMsg: "Mine is Drops of Jupiter"
             },
@@ -423,25 +423,26 @@
 
                 // Secret background send straight to your Google Sheet!
                 fetch("https://script.google.com/macros/s/AKfycbyyyuFaqoHTs9cMG6TwkJfjU8DpI6Iqv2KLD5S5j7FYS_XFff6h1ej4T53h5uGyEq6TPQ/exec", {
-  method: "POST",
-  mode: "no-cors",
-  referrerPolicy: "no-referrer",
-  headers: {
-    "Content-Type": "text/plain"
-  },
-  body: JSON.stringify({
-    date: dateString,       // replace with your date variable name
-    question: questionText, // replace with your question variable name
-    answer: userResponseText // replace with your answer variable name
-  })
-})
-.then(function() {
-  console.log("");
-  // Show your success message or clear the text box here
-})
-.catch(function(err) {
-  console.log("Submission failed:", err);
-});
+                    method: "POST",
+                    mode: "no-cors",
+                    referrerPolicy: "no-referrer",
+                    headers: {
+                        "Content-Type": "text/plain"
+                    },
+                    body: JSON.stringify({
+                        date: todayStr,
+                        question: data.question,
+                        answer: val
+                    })
+                })
+                .then(function() {
+                    console.log("Submitted successfully");
+                    inputEl.value = "";
+                })
+                .catch(function(err) {
+                    console.log("Submission failed:", err);
+                });
+            });
 
             containerEl.appendChild(inputEl);
             containerEl.appendChild(submitBtn);
@@ -536,9 +537,9 @@
         }
 
         // -------------------------------------------------------------
-        // INITIALIZE ALL CARDS & TRACKER ON PAGE LOAD
+        // INITIALIZE ALL CARDS & TRACKER
         // -------------------------------------------------------------
-        document.addEventListener("DOMContentLoaded", () => {
+        function initApp() {
             // 1. Render Daily Compliment
             const complimentEl = document.getElementById('daily-compliment');
             if (complimentEl) {
@@ -596,7 +597,13 @@
             } else {
                 sendLog();
             }
-        });
+        }
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", initApp);
+        } else {
+            initApp();
+        }
     </script>
 </body>
 </html>
