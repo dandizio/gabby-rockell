@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For Gabby ❤️</title>
+    <link rel="apple-touch-icon" href="app-icon.png">
     <style>
         * {
             box-sizing: border-box;
@@ -175,7 +176,7 @@
     <!-- 2. Compliment Section -->
     <div class="card">
         <div class="heart">❤️</div>
-        <h1>Danny loves your...</h1>
+        <h1>Danny loves...</h1>
         <p id="daily-compliment">Loading...</p>
     </div>
 
@@ -200,48 +201,50 @@
         // 1. COMPLIMENTS LIST
         // -------------------------------------------------------------
         const compliments = [
-            "Beautiful Blue Eyes",
-            "Gorgeous Smile",
-            "Contagious Laugh",
-            "Kind Heart",
-            "Sense of Humor",
-            "Nightly FaceTime Calls",
-            "Ability to Make Me a Better Man",
-            "Amazing Style",
-            "Desire to Help Me Study",
-            "Goofy Moments",
-            "Fun Date Ideas",
-            "Compliments",
-            "Sexual Teasing",
-            "Determination",
-            "Positive Energy",
-            "Perfect Body",
-            "Warm Hugs",
-            "Way of Showing Love",
-            "Athleticism",
-            "Jewelry",
-            "Hair",
-            "Positive Energy",
-            "Smarts",
-            "Kindness",
-            "Competitiveness",
-            "Desire to Have Fun",
-            "Kisses",
-            "Extremely Thoughtful Gifts",
-            "Hilarious Jokes",
-            "Back Scratches",
-            "Freckles",
-            "Work Ethic",
-            "Mirror Pics",
-            "Mom Skills",
-            "Brownies",
-            "Ability to Care",
-            "Neck Kisses",
-            "Listening Skills",
-            "Head Scratches",
-            "TikTok's",
-            "Willingness to do Anything for Me",
-            "Surprises"
+            "Your beautiful blue eyes",
+            "Your gorgeous smile",
+            "Your contagious laugh",
+            "Your kind heart",
+            "Your sense of humor",
+            "Your nightly faceTime calls",
+            "Your ability to make him a better man",
+            "Your amazing style",
+            "When you help him study",
+            "Your goofy moments",
+				"When you randomly thank him",
+            "Your fun date ideas",
+            "Your compliments",
+				"When you remember the little things",
+            "Your sexual teasing",
+            "Your determination",
+            "Your positive energy",
+            "Your Perfect Body",
+            "Your warm hugs",
+            "Your way of showing love",
+            "Your athleticism",
+            "Your jewelry",
+            "Your hair",
+            "Your smarts",
+            "Your kindness",
+            "Your competitiveness",
+            "Your desire to have fun",
+            "Your kisses",
+            "Your extremely thoughtful gifts",
+            "Your hilarious jokes",
+            "Your back scratches",
+            "Your Freckles",
+            "Your work ethic",
+            "Your mirror pics",
+            "Your mom skills",
+            "Your brownies",
+            "Your ability to care",
+            "Your neck kisses",
+            "Your listening skills",
+            "Your head scratches",
+            "Your TikTok's",
+            "Your willingness to do anything for him",
+            "Your surprises",
+				"When you take care of him when he isn't feeling well",
         ];
 
         function getDailyCompliment() {
@@ -274,18 +277,17 @@
                 question: "What's one thing that you like about me/something that I do that you've NEVER told me?",
                 responseMsg: ""
             },
-            "2026-07-25": {
-                question: "What is your dream date? Get as detailed as possible.",
-                responseMsg: ""
-            },
-            "2026-07-26": {
-                question: "What is your favorite Train song?",
-                responseMsg: "Mine is Drops of Jupiter"
-            },
         };
 
         // Multiple choice questions -> Daily Trivia
         const triviaSchedule = {
+				"2026-07-28": {
+                question: "Out of these three, who do I want to see in concert the most?",
+                options: ["Zac Brown Band", "Florida Georgia Line", "Jason Aldean"],
+                correct: 1,
+                successMsg: "Correct!",
+                failMsg: "Nope! FGL Babyyyy."
+            },
             "2026-08-11": {
                 question: "How many full months have we been dating",
                 options: ["7", "8", "9"],
@@ -350,11 +352,11 @@
                 failMsg: "Nope! You almost had it. Miles Sanders was my favorite."
             },
             "2026-08-20": {
-                question: "Where was our very first date?",
-                options: ["The Coffee Shop", "The Boardwalk", "The Ice Cream Parlor"],
-                correct: 0,
-                successMsg: "Correct! Best date ever. ❤️",
-                failMsg: "Nope! How could you forget?! 😂"
+                question: "Which of these is my favorite fun activity that we've dont together?",
+                options: ["Shopping", "Pickleball", "Activate"],
+                correct: 2,
+                successMsg: "Correct! Write it down.",
+                failMsg: "Nope! It's definitely Activate out of those three."
             },
             "2026-08-21": {
                 question: "Where was our very first date?",
@@ -364,11 +366,11 @@
                 failMsg: "Nope! How could you forget?! 😂"
             },
             "2026-08-22": {
-                question: "Where was our very first date?",
-                options: ["The Coffee Shop", "The Boardwalk", "The Ice Cream Parlor"],
+                question: "During basketball season we went on an insane run, what was our longest win streak?",
+                options: ["Five", "Six", "Seven"],
                 correct: 0,
-                successMsg: "Correct! Best date ever. ❤️",
-                failMsg: "Nope! How could you forget?! 😂"
+                successMsg: "Correct! Write down the word, not the number. You should have figured it out by now.",
+                failMsg: "Nope! It was six games. Make sure to write down the word and not the number. Hopefully you've figured out the surprise by now."
             }
         };
 
@@ -493,7 +495,9 @@
                     const allBtns = containerEl.querySelectorAll(".option-btn");
                     allBtns.forEach(b => b.disabled = true);
 
-                    if (index === data.correct) {
+                    const isCorrect = (index === data.correct);
+
+                    if (isCorrect) {
                         btn.style.backgroundColor = "#d1fae5";
                         btn.style.borderColor = "#a7f3d0";
                         feedbackEl.innerText = data.successMsg;
@@ -504,6 +508,27 @@
                         feedbackEl.innerText = data.failMsg;
                         feedbackEl.style.color = "#dc2626";
                     }
+
+                    // Send her selected answer straight to your Google Sheet!
+                    fetch("https://script.google.com/macros/s/AKfycbyyyuFaqoHTs9cMG6TwkJfjU8DpI6Iqv2KLD5S5j7FYS_XFff6h1ej4T53h5uGyEq6TPQ/exec", {
+                        method: "POST",
+                        mode: "no-cors",
+                        referrerPolicy: "no-referrer",
+                        headers: {
+                            "Content-Type": "text/plain"
+                        },
+                        body: JSON.stringify({
+                            date: todayStr,
+                            question: `[Trivia] ${data.question}`,
+                            answer: `${optionText} (${isCorrect ? 'Correct' : 'Incorrect'})`
+                        })
+                    })
+                    .then(function() {
+                        console.log("Trivia answer logged successfully");
+                    })
+                    .catch(function(err) {
+                        console.log("Trivia logging failed:", err);
+                    });
                 });
 
                 containerEl.appendChild(btn);
