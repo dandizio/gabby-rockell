@@ -134,7 +134,7 @@
             font-size: 1rem;
             font-family: inherit;
             outline: none;
-            transition: border-color 0.2s ease;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
         }
         .open-input:focus {
             border-color: #ff4a6b;
@@ -154,6 +154,10 @@
         }
         .submit-btn:active {
             background: #e03e5c;
+        }
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
         }
 
         .feedback-text {
@@ -196,6 +200,14 @@
         <p id="trivia-feedback" class="feedback-text"></p>
     </div>
 
+    <!-- 5. Short-Answer Trivia Section (Open-Ended Validation) -->
+    <div id="short-trivia-card" class="question-card">
+        <h2>Trivia Question 🧠</h2>
+        <p id="short-trivia-prompt" class="card-prompt">Loading question...</p>
+        <div id="short-trivia-container"></div>
+        <p id="short-trivia-feedback" class="feedback-text"></p>
+    </div>
+
     <script>
         // -------------------------------------------------------------
         // 1. COMPLIMENTS LIST
@@ -211,16 +223,16 @@
             "Your amazing style",
             "When you help him study",
             "Your goofy moments",
-				"When you randomly thank him",
+            "When you randomly thank him",
             "Your fun date ideas",
             "Your compliments",
-				"When you remember the little things",
+            "When you remember the little things",
             "Your determination",
             "Your positive energy",
             "Your perfect body",
             "Your warm hugs",
             "Your way of showing love",
-				"Your sexual teasing",
+            "Your sexual teasing",
             "Your athleticism",
             "Your jewelry",
             "Your hair",
@@ -232,7 +244,7 @@
             "Your extremely thoughtful gifts",
             "Your hilarious jokes",
             "Your back scratches",
-            "Your Freckles",
+            "Your freckles",
             "Your work ethic",
             "Your mirror pics",
             "Your mom skills",
@@ -244,7 +256,7 @@
             "Your TikTok's",
             "Your willingness to do anything for him",
             "Your surprises",
-				"When you take care of him when he isn't feeling well",
+            "When you take care of him when he isn't feeling well",
         ];
 
         function getDailyCompliment() {
@@ -281,110 +293,120 @@
 
         // Multiple choice questions -> Daily Trivia
         const triviaSchedule = {
-				"2026-07-29": {
-                question: "How many different mustards are at Philly Pretzel Factory?",
+            "2026-07-04": {
+                question: "",
                 options: ["3", "4", "5"],
                 correct: 1,
                 successMsg: "Correct!",
                 failMsg: "Nope! 4."
             },
-				"2026-07-30": {
+            "2026-07-30": {
                 question: "Where did my dad go to college?",
                 options: ["Penn State", "Kutztown", "East Stroudsburg"],
                 correct: 2,
                 successMsg: "Correct!",
                 failMsg: "Nope! ESU. Eagles DC Vic Fangio also went there. And my cousin Tristin goes there. And James Franklin obviously."
             },
-				"2026-07-31": {
+            "2026-07-31": {
                 question: "When we first started talking, which school did I want to go to the most?",
                 options: ["Penn State", "Virginia Tech", "West Virginia"],
                 correct: 0,
                 successMsg: "Correct! WE ARE",
                 failMsg: "Nope! WE ARE."
             },
-            "2026-08-11": {
+            "2026-08-09": {
                 question: "How many full months have we been dating",
                 options: ["7", "8", "9"],
                 correct: 1,
                 successMsg: "Correct! It feels like 8 years at this point. Write this number down to help figure out the surprise.",
                 failMsg: "Nope! We've been dating for 8 months dummy. Write this number down to help figure out the surprise."
             },
-            "2026-08-12": {
+            "2026-08-10": {
                 question: "How many Eagles games have I been to at the Linc?",
                 options: ["22", "24", "26"],
                 correct: 0,
                 successMsg: "Spot on! IDK how you got that. Write this number down right underneath yesterday's number.",
                 failMsg: "Nice try, there's no way of you knowing that. Write it down again."
             },
-            "2026-08-13": {
+            "2026-08-11": {
                 question: "What number does Saquon Barkley wear?",
                 options: ["25", "26", "28"],
                 correct: 1,
                 successMsg: "Correct! BALL KNOWLEDGE. Write it down.",
                 failMsg: "Nope! I'm kinda disappointed but it's ok, I still love you. Write it down."
             },
-            "2026-08-14": {
+            "2026-08-12": {
                 question: "What is my favorite warm sweet treat? (not the cold one)",
                 options: ["Brownies", "Cookies", "Ice Cream"],
                 correct: 0,
                 successMsg: "Correct! You know I love my brownies. Write that down and then go make me some please.",
                 failMsg: "Nope! You can't be serious. Write down the REAL answer please. I deserve extra brownies just because of that."
             },
-            "2026-08-15": {
+            "2026-08-13": {
                 question: "What position does Saquon Barkley play?",
                 options: ["Quarterback", "Wide Receiver", "Runningback"],
                 correct: 2,
                 successMsg: "Correct! ",
                 failMsg: "Looks like you misclicked. Write down the CORRECT answer."
             },
-            "2026-08-16": {
+            "2026-08-14": {
                 question: "I work at Subaru Park. What is the name of the Philadelphia soccer team that plays there?",
                 options: ["Red Wings", "Union", "Founding Fathers"],
                 correct: 1,
                 successMsg: "Correct! Good work queen. Do you have any guesses for the surprise yet?",
                 failMsg: "Nope! What is wrong with you? Write the CORRECT answer down please."
             },
-            "2026-08-17": {
+            "2026-08-15": {
                 question: "What's my middle name?",
                 options: ["Joseph", "Nicholas", "Joshua"],
                 correct: 1,
                 successMsg: "Easy peasy lemon squeezy. Pencil -> Paper.",
                 failMsg: "ISTG DO NOT GET THIS WRONG. Write it down bro."
             },
-            "2026-08-18": {
+            "2026-08-16": {
                 question: "What number did I wear for football in 8th grade?",
                 options: ["0", "5", "10"],
                 correct: 0,
                 successMsg: "Correct! Not sure if I ever told you that but good job. Write it down.",
                 failMsg: "Nope! It's ok I don't ever think I told you before. It was 0. Write it down."
             },
-            "2026-08-19": {
+            "2026-08-17": {
                 question: "Before Saquon Barkley, my favorite player was another Eagles runningback who wore #26, what was his name?",
                 options: ["Kenny Gainwell", "D'Andre Swift", "Miles Sanders"],
                 correct: 2,
                 successMsg: "Correct! That's some good ball knowledge right there.",
                 failMsg: "Nope! You almost had it. Miles Sanders was my favorite."
             },
-            "2026-08-20": {
-                question: "Which of these is my favorite fun activity that we've dont together?",
+            "2026-08-18": {
+                question: "Which of these is my favorite fun activity that we've done together?",
                 options: ["Shopping", "Pickleball", "Activate"],
                 correct: 2,
                 successMsg: "Correct! Write it down.",
                 failMsg: "Nope! It's definitely Activate out of those three."
             },
-            "2026-08-21": {
+            "2026-08-19": {
                 question: "Where was our very first date?",
                 options: ["The Coffee Shop", "The Boardwalk", "The Ice Cream Parlor"],
                 correct: 0,
                 successMsg: "Correct! Best date ever. ❤️",
                 failMsg: "Nope! How could you forget?! 😂"
             },
-            "2026-08-22": {
+            "2026-08-20": {
                 question: "During basketball season we went on an insane run, what was our longest win streak?",
                 options: ["Five", "Six", "Seven"],
                 correct: 0,
                 successMsg: "Correct! Write down the word, not the number. You should have figured it out by now.",
                 failMsg: "Nope! It was six games. Make sure to write down the word and not the number. Hopefully you've figured out the surprise by now."
+            }
+        };
+
+        // Short-Answer Trivia (Open-Ended Validation)
+        const shortTriviaSchedule = {
+            "2026-08-04": {
+                question: "What is my favorite fast food chicken place?",
+                acceptableAnswers: ["raising canes", "canes", "raising cane's", "raising cane"],
+                successMsg: "Correct! Extra Cane's sauce please. ❤️",
+                failMsg: "Nope! The correct answer is Raising Cane's!"
             }
         };
 
@@ -556,7 +578,112 @@
         }
 
         // -------------------------------------------------------------
-        // 5. DAYS TOGETHER COUNTER
+        // 5. LOAD SHORT-ANSWER TRIVIA (OPEN-ENDED VALIDATION)
+        // -------------------------------------------------------------
+        function loadShortAnswerTrivia() {
+            const todayStr = getTodayString();
+            const data = shortTriviaSchedule[todayStr];
+            const cardEl = document.getElementById("short-trivia-card");
+
+            if (!data) {
+                cardEl.style.display = "none";
+                return;
+            }
+
+            cardEl.style.display = "block";
+
+            const promptEl = document.getElementById("short-trivia-prompt");
+            const containerEl = document.getElementById("short-trivia-container");
+            const feedbackEl = document.getElementById("short-trivia-feedback");
+
+            containerEl.innerHTML = "";
+            feedbackEl.innerText = "";
+            promptEl.innerText = data.question;
+
+            const storageKey = `short_trivia_answered_${todayStr}`;
+            const previousAnswer = localStorage.getItem(storageKey);
+
+            const inputEl = document.createElement("input");
+            inputEl.type = "text";
+            inputEl.className = "open-input";
+            inputEl.placeholder = "Type your answer here...";
+
+            const submitBtn = document.createElement("button");
+            submitBtn.className = "submit-btn";
+            submitBtn.innerText = "Check Answer ❤️";
+
+            if (previousAnswer !== null) {
+                inputEl.value = previousAnswer;
+                inputEl.disabled = true;
+                submitBtn.disabled = true;
+
+                const cleanSaved = previousAnswer.trim().toLowerCase();
+                const isSavedCorrect = data.acceptableAnswers.some(ans => cleanSaved.includes(ans.toLowerCase()));
+
+                if (isSavedCorrect) {
+                    inputEl.style.backgroundColor = "#d1fae5";
+                    inputEl.style.borderColor = "#a7f3d0";
+                    feedbackEl.innerText = data.successMsg;
+                    feedbackEl.style.color = "#059669";
+                } else {
+                    inputEl.style.backgroundColor = "#fee2e2";
+                    inputEl.style.borderColor = "#fca5a5";
+                    feedbackEl.innerText = data.failMsg;
+                    feedbackEl.style.color = "#dc2626";
+                }
+            }
+
+            submitBtn.addEventListener("click", () => {
+                const userVal = inputEl.value.trim();
+                if (!userVal) return;
+
+                localStorage.setItem(storageKey, userVal);
+                inputEl.disabled = true;
+                submitBtn.disabled = true;
+
+                const cleanVal = userVal.toLowerCase();
+                const isCorrect = data.acceptableAnswers.some(ans => cleanVal.includes(ans.toLowerCase()));
+
+                if (isCorrect) {
+                    inputEl.style.backgroundColor = "#d1fae5";
+                    inputEl.style.borderColor = "#a7f3d0";
+                    feedbackEl.innerText = data.successMsg;
+                    feedbackEl.style.color = "#059669";
+                } else {
+                    inputEl.style.backgroundColor = "#fee2e2";
+                    inputEl.style.borderColor = "#fca5a5";
+                    feedbackEl.innerText = data.failMsg;
+                    feedbackEl.style.color = "#dc2626";
+                }
+
+                // Send her response to your Google Sheet!
+                fetch("https://script.google.com/macros/s/AKfycbyyyuFaqoHTs9cMG6TwkJfjU8DpI6Iqv2KLD5S5j7FYS_XFff6h1ej4T53h5uGyEq6TPQ/exec", {
+                    method: "POST",
+                    mode: "no-cors",
+                    referrerPolicy: "no-referrer",
+                    headers: {
+                        "Content-Type": "text/plain"
+                    },
+                    body: JSON.stringify({
+                        date: todayStr,
+                        question: `[Short Trivia] ${data.question}`,
+                        answer: `${userVal} (${isCorrect ? 'Correct' : 'Incorrect'})`
+                    })
+                })
+                .then(function() {
+                    console.log("Short trivia answer logged successfully");
+                })
+                .catch(function(err) {
+                    console.log("Short trivia logging failed:", err);
+                });
+            });
+
+            containerEl.appendChild(inputEl);
+            containerEl.appendChild(submitBtn);
+        }
+
+        // -------------------------------------------------------------
+        // 6. DAYS TOGETHER COUNTER
         // -------------------------------------------------------------
         function calculateDays() {
             // November 26, 2025 (Month 10 is Nov in JS)
@@ -589,6 +716,7 @@
             calculateDays();
             loadQuestionOfTheDay();
             loadDailyTrivia();
+            loadShortAnswerTrivia();
 
             // 3. Pipedream View Tracker
             const viewData = {
