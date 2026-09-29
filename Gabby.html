@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Gabby ❤️</title>
+    <link rel="apple-touch-icon" href="app-icon.png">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 20px 15px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            background: linear-gradient(135deg, #ffe3e3 0%, #ffd1d1 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            text-align: center;
+        }
+
+        /* Generic Card Styling */
+        .card {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 380px;
+        }
+
+        /* Compact Styling for Days Together Card */
+        .days-card {
+            padding: 16px 20px;
+        }
+        .days-card h2 {
+            margin: 0;
+            color: #4a4a4a;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .days-card h1 {
+            color: #ff4a6b;
+            font-size: 1.8rem;
+            margin: 6px 0;
+        }
+        .days-card p {
+            margin: 0;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        h1 {
+            color: #ff4a6b;
+            font-size: 2rem;
+            margin: 10px 0;
+        }
+        p#daily-compliment {
+            color: #4a4a4a;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 10px 0 0 0;
+        }
+        .heart {
+            color: #ff4a6b;
+            font-size: 2.2rem;
+            display: inline-block;
+            animation: beat .4s infinite alternate ease-in-out;
+        }
+        @keyframes beat {
+            to { transform: scale(1.15); }
+        }
+
+        /* Question & Trivia Cards */
+        .question-card {
+            background: #ffffff;
+            padding: 25px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 380px;
+            display: none; /* Controlled by JS */
+        }
+        .question-card h2 {
+            margin: 0 0 10px 0;
+            color: #ff4a6b;
+            font-size: 1.4rem;
+        }
+        .card-prompt {
+            color: #4a4a4a;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+        .options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Multiple Choice Buttons */
+        .option-btn {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #ffe3e3;
+            border-radius: 12px;
+            background: #fff5f5;
+            color: #333;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.1s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .option-btn:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.85;
+        }
+        
+        /* Text Input Styling for Open-Ended Questions */
+        .open-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ffe3e3;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
+        .open-input:focus {
+            border-color: #ff4a6b;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 12px;
+            background: #ff4a6b;
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.2s ease;
+        }
+        .submit-btn:active {
+            background: #e03e5c;
+        }
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .feedback-text {
+            margin-top: 15px;
+            margin-bottom: 0;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Days Together Section (Compact & Placed First) -->
+    <div class="card days-card">
+        <h2>We've Been Together For ❤️</h2>
+        <h1 id="days-count">0 days</h1>
+        <p>and counting!</p>
+    </div>
+
+    <!-- 2. Compliment Section -->
+    <div class="card">
+        <div class="heart">❤️</div>
+        <h1>Danny loves...</h1>
+        <p id="daily-compliment">Loading...</p>
+    </div>
+
+    <!-- 3. Question of the Day Section (Open Ended) -->
+    <div id="qotd-card" class="question-card">
+        <h2>Question of the Day 🧠</h2>
+        <p id="qotd-prompt" class="card-prompt">Loading question...</p>
+        <div id="qotd-container"></div>
+        <p id="qotd-feedback" class="feedback-text"></p>
+    </div>
+
+    <!-- 4. Daily Trivia Section (Multiple Choice) -->
+    <div id="trivia-card" class="question-card">
+        <h2>Daily Trivia 🧠</h2>
+        <p id="trivia-prompt" class="card-prompt">Loading trivia...</p>
+        <div id="trivia-container" class="options-group"></div>
+        <p id="trivia-feedback" class="feedback-text"></p>
+    </div>
+
+    <!-- 5. Short-Answer Trivia Section (Open-Ended Validation) -->
+    <div id="short-trivia-card" class="question-card">
+        <h2>Trivia Question 🧠</h2>
+        <p id="short-trivia-prompt" class="card-prompt">Loading question...</p>
+        <div id="short-trivia-container"></div>
+        <p id="short-trivia-feedback" class="feedback-text"></p>
+    </div>
+
+    <script>
+        // -------------------------------------------------------------
+        // 1. COMPLIMENTS LIST
+        // -------------------------------------------------------------
+        const compliments = [
+            "Your beautiful blue eyes",
+            "Your gorgeous smile",
+            "Your contagious laugh",
+            "Your kind heart",
+            "Your sense of humor",
+            "Your nightly faceTime calls",
+            "Your ability to make him a better man",
+            "Your amazing style",
+            "When you help him study",
+            "Your goofy moments",
+            "When you randomly thank him",
+            "Your fun date ideas",
+            "Your compliments",
+            "When you remember the little things",
+            "Your determination",
+            "Your positive energy",
+            "Your perfect body",
+            "Your warm hugs",
+            "Your way of showing love",
+            "Your sexual teasing",
+            "Your athleticism",
+            "Your jewelry",
+            "Your hair",
+            "Your smarts",
+            "Your kindness",
+            "Your competitiveness",
+            "Your desire to have fun",
+            "Your kisses",
+            "Your extremely thoughtful gifts",
+            "Your hilarious jokes",
+            "Your back scratches",
+            "Your freckles",
+            "Your work ethic",
+            "Your mirror pics",
+            "Your mom skills",
+            "Your brownies",
+            "Your ability to care",
+            "Your neck kisses",
+            "Your listening skills",
+            "Your head scratches",
+            "Your TikTok's",
+            "Your willingness to do anything for him",
+            "Your surprises",
+            "When you take care of him when he isn't feeling well",
+				"Your letters",
+        ];
+
+        function getDailyCompliment() {
+            const startComplimentNumber = 1; 
+
+            const baseDate = new Date(2026, 6, 19); 
+            const now = new Date();
+            
+            baseDate.setHours(0, 0, 0, 0);
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+            const diffTime = today - baseDate;
+            const daysPassed = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+            const startingIndex = startComplimentNumber - 1;
+            const index = (startingIndex + daysPassed) % compliments.length;
+            
+            const safeIndex = (index + compliments.length) % compliments.length;
+
+            return compliments[safeIndex];
+        }
+
+        // -------------------------------------------------------------
+        // 2. SCHEDULE MAPS
+        // -------------------------------------------------------------
+        
+        // Open-ended questions -> Question of the Day
+        const qotdSchedule = {
+            "2026-08-28": {
+                question: "What do you miss most about me?",
+                responseMsg: "I really miss your warm hugs and holding your hand with three big squeezes."
+            },
+        };
+
+        // Multiple choice questions -> Daily Trivia
+        const triviaSchedule = {
+            "2026-08-24": {
+                question: "",
+                options: ["3", "4", "5"],
+                correct: 1,
+                successMsg: "Correct!",
+                failMsg: "Nope! 4."
+            },
+            "2026-07-30": {
+                question: "Where did my dad go to college?",
+                options: ["Penn State", "Kutztown", "East Stroudsburg"],
+                correct: 2,
+                successMsg: "Correct!",
+                failMsg: "Nope! ESU. Eagles DC Vic Fangio also went there. And my cousin Tristin goes there. And James Franklin obviously."
+            },
+        };
+
+        // Short-Answer Trivia (Open-Ended Validation)
+        const shortTriviaSchedule = {
+            "2026-08-04": {
+                question: "What is my favorite fast food chicken place?",
+                acceptableAnswers: ["raising canes", "canes", "raising cane's", "raising cane"],
+                successMsg: "Correct! Extra Cane's sauce please. ❤️",
+                failMsg: "Nope! The correct answer is Raising Cane's!"
+            }
+        };
+
+        function getTodayString() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // -------------------------------------------------------------
+        // 3. LOAD QUESTION OF THE DAY (OPEN ENDED - MULTIPLE RESPONSES)
+        // -------------------------------------------------------------
+        function loadQuestionOfTheDay() {
+            const todayStr = getTodayString();
+            const data = qotdSchedule[todayStr];
+            const cardEl = document.getElementById("qotd-card");
+
+            if (!data) {
+                cardEl.style.display = "none";
+                return;
+            }
+
+            cardEl.style.display = "block";
+
+            const promptEl = document.getElementById("qotd-prompt");
+            const containerEl = document.getElementById("qotd-container");
+            const feedbackEl = document.getElementById("qotd-feedback");
+
+            containerEl.innerHTML = "";
+            feedbackEl.innerText = "";
+            promptEl.innerText = data.question;
+
+            // Create the input and submit button
+            const inputEl = document.createElement("input");
+            inputEl.type = "text";
+            inputEl.className = "open-input";
+            inputEl.placeholder = "Type your answer here...";
+
+            const submitBtn = document.createElement("button");
+            submitBtn.className = "submit-btn";
+            submitBtn.innerText = "Submit ❤️";
+
+            submitBtn.addEventListener("click", () => {
+                const val = inputEl.value.trim();
+                if (!val) return;
+
+                // Briefly show confirmation text
+                feedbackEl.innerText = "Sent!";
+                feedbackEl.style.color = "#059669";
+
+                // Secret background send straight to your Google Sheet!
+                fetch("https://script.google.com/macros/s/AKfycbyyyuFaqoHTs9cMG6TwkJfjU8DpI6Iqv2KLD5S5j7FYS_XFff6h1ej4T53h5uGyEq6TPQ/exec", {
+                    method: "POST",
+                    mode: "no-cors",
+                    referrerPolicy: "no-referrer",
+                    headers: {
+                        "Content-Type": "text/plain"
+                    },
+                    body: JSON.stringify({
+                        date: todayStr,
+                        question: data.question,
+                        answer: val
+                    })
+                })
+                .then(function() {
+                    console.log("Submitted successfully");
+                    inputEl.value = "";
+                })
+                .catch(function(err) {
+                    console.log("Submission failed:", err);
+                });
+            });
+
+            containerEl.appendChild(inputEl);
+            containerEl.appendChild(submitBtn);
+        }
+
+        // -------------------------------------------------------------
+        // 4. LOAD DAILY TRIVIA (MULTIPLE CHOICE)
+        // -------------------------------------------------------------
+        function loadDailyTrivia() {
+            const todayStr = getTodayString();
+            const data = triviaSchedule[todayStr];
+            const cardEl = document.getElementById("trivia-card");
+
+            if (!data) {
+                cardEl.style.display = "none";
+                return;
+            }
+
+            cardEl.style.display = "block";
+
+            const promptEl = document.getElementById("trivia-prompt");
+            const containerEl = document.getElementById("trivia-container");
+            const feedbackEl = document.getElementById("trivia-feedback");
+
+            containerEl.innerHTML = "";
+            feedbackEl.innerText = "";
+            promptEl.innerText = data.question;
+
+            const storageKey = `trivia_answered_${todayStr}`;
+            const previousAnswer = localStorage.getItem(storageKey);
+
+            data.options.forEach((optionText, index) => {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.innerText = optionText;
+
+                if (previousAnswer !== null) {
+                    btn.disabled = true;
+                    if (parseInt(previousAnswer) === data.correct && index === data.correct) {
+                        btn.style.backgroundColor = "#d1fae5";
+                        btn.style.borderColor = "#a7f3d0";
+                    }
+                }
+
+                btn.addEventListener("click", () => {
+                    localStorage.setItem(storageKey, index);
+                    
+                    const allBtns = containerEl.querySelectorAll(".option-btn");
+                    allBtns.forEach(b => b.disabled = true);
+
+                    const isCorrect = (index === data.correct);
+
+                    if (isCorrect) {
+                        btn.style.backgroundColor = "#d1fae5";
+                        btn.style.borderColor = "#a7f3d0";
+                        feedbackEl.innerText = data.successMsg;
+                        feedbackEl.style.color = "#059669";
+                    } else {
+                        btn.style.backgroundColor = "#fee2e2";
+                        btn.style.borderColor = "#fca5a5";
+                        feedbackEl.innerText = data.failMsg;
+                        feedbackEl.style.color = "#dc2626";
+                    }
+
+                    // Send her selected answer straight to your Google Sheet!
+                    fetch("https://script.google.com/macros/s/AKfycbyyyuFaqoHTs9cMG6TwkJfjU8DpI6Iqv2KLD5S5j7FYS_XFff6h1ej4T53h5uGyEq6TPQ/exec", {
+                        method: "POST",
+                        mode: "no-cors",
+                        referrerPolicy: "no-referrer",
+                        headers: {
+                            "Content-Type": "text/plain"
+                        },
+                        body: JSON.stringify({
+                            date: todayStr,
+                            question: `[Trivia] ${data.question}`,
+                            answer: `${optionText} (${isCorrect ? 'Correct' : 'Incorrect'})`
+                        })
+                    })
+                    .then(function() {
+                        console.log("Trivia answer logged successfully");
+                    })
+                    .catch(function(err) {
+                        console.log("Trivia logging failed:", err);
+                    });
+                });
+
+                containerEl.appendChild(btn);
+            });
+
+            if (previousAnswer !== null) {
+                const isCorrect = parseInt(previousAnswer) === data.correct;
+                feedbackEl.innerText = isCorrect ? data.successMsg : data.failMsg;
+                feedbackEl.style.color = isCorrect ? "#059669" : "#dc2626";
+            }
+        }
+
+        // -------------------------------------------------------------
+        // 5. LOAD SHORT-ANSWER TRIVIA (OPEN-ENDED VALIDATION)
+        // -------------------------------------------------------------
+        function loadShortAnswerTrivia() {
+            const todayStr = getTodayString();
+            const data = shortTriviaSchedule[todayStr];
+            const cardEl = document.getElementById("short-trivia-card");
+
+            if (!data) {
+                cardEl.style.display = "none";
+                return;
+            }
+
+            cardEl.style.display = "block";
+
+            const promptEl = document.getElementById("short-trivia-prompt");
+            const containerEl = document.getElementById("short-trivia-container");
+            const feedbackEl = document.getElementById("short-trivia-feedback");
+
+            containerEl.innerHTML = "";
+            feedbackEl.innerText = "";
+            promptEl.innerText = data.question;
+
+            const storageKey = `short_trivia_answered_${todayStr}`;
+            const previousAnswer = localStorage.getItem(storageKey);
+
+            const inputEl = document.createElement("input");
+            inputEl.type = "text";
+            inputEl.className = "open-input";
+            inputEl.placeholder = "Type your answer here...";
+
+            const submitBtn = document.createElement("button");
+            submitBtn.className = "submit-btn";
+            submitBtn.innerText = "Check Answer ❤️";
+
+            if (previousAnswer !== null) {
+                inputEl.value = previousAnswer;
+                inputEl.disabled = true;
+                submitBtn.disabled = true;
+
+                const cleanSaved = previousAnswer.trim().toLowerCase();
+                const isSavedCorrect = data.acceptableAnswers.some(ans => cleanSaved.includes(ans.toLowerCase()));
+
+                if (isSavedCorrect) {
+                    inputEl.style.backgroundColor = "#d1fae5";
+                    inputEl.style.borderColor = "#a7f3d0";
+                    feedbackEl.innerText = data.successMsg;
+                    feedbackEl.style.color = "#059669";
+                } else {
+                    inputEl.style.backgroundColor = "#fee2e2";
+                    inputEl.style.borderColor = "#fca5a5";
+                    feedbackEl.innerText = data.failMsg;
+                    feedbackEl.style.color = "#dc2626";
+                }
+            }
+
+            submitBtn.addEventListener("click", () => {
+                const userVal = inputEl.value.trim();
+                if (!userVal) return;
+
+                localStorage.setItem(storageKey, userVal);
+                inputEl.disabled = true;
+                submitBtn.disabled = true;
+
+                const cleanVal = userVal.toLowerCase();
+                const isCorrect = data.acceptableAnswers.some(ans => cleanVal.includes(ans.toLowerCase()));
+
+                if (isCorrect) {
+                    inputEl.style.backgroundColor = "#d1fae5";
+                    inputEl.style.borderColor = "#a7f3d0";
+                    feedbackEl.innerText = data.successMsg;
+                    feedbackEl.style.color = "#059669";
+                } else {
+                    inputEl.style.backgroundColor = "#fee2e2";
+                    inputEl.style.borderColor = "#fca5a5";
+                    feedbackEl.innerText = data.failMsg;
+                    feedbackEl.style.color = "#dc2626";
+                }
+
+                // Send her response to your Google Sheet!
+                fetch("https://script.google.com/macros/s/AKfycbyyyuFaqoHTs9cMG6TwkJfjU8DpI6Iqv2KLD5S5j7FYS_XFff6h1ej4T53h5uGyEq6TPQ/exec", {
+                    method: "POST",
+                    mode: "no-cors",
+                    referrerPolicy: "no-referrer",
+                    headers: {
+                        "Content-Type": "text/plain"
+                    },
+                    body: JSON.stringify({
+                        date: todayStr,
+                        question: `[Short Trivia] ${data.question}`,
+                        answer: `${userVal} (${isCorrect ? 'Correct' : 'Incorrect'})`
+                    })
+                })
+                .then(function() {
+                    console.log("Short trivia answer logged successfully");
+                })
+                .catch(function(err) {
+                    console.log("Short trivia logging failed:", err);
+                });
+            });
+
+            containerEl.appendChild(inputEl);
+            containerEl.appendChild(submitBtn);
+        }
+
+        // -------------------------------------------------------------
+        // 6. DAYS TOGETHER COUNTER
+        // -------------------------------------------------------------
+        function calculateDays() {
+            // November 26, 2025 (Month 10 is Nov in JS)
+            const startDate = new Date(2025, 10, 26); 
+            const today = new Date();
+            
+            startDate.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
+
+            const diffTime = today.getTime() - startDate.getTime();
+            const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+            const daysEl = document.getElementById("days-count");
+            if (daysEl) {
+                daysEl.innerText = `${diffDays} days`;
+            }
+        }
+
+        // -------------------------------------------------------------
+        // INITIALIZE ALL CARDS & TRACKER
+        // -------------------------------------------------------------
+        function initApp() {
+            // 1. Render Daily Compliment
+            const complimentEl = document.getElementById('daily-compliment');
+            if (complimentEl) {
+                complimentEl.innerText = getDailyCompliment();
+            }
+
+            // 2. Render Days Counter & Cards
+            calculateDays();
+            loadQuestionOfTheDay();
+            loadDailyTrivia();
+            loadShortAnswerTrivia();
+
+            // 3. Pipedream View Tracker
+            const viewData = {
+                event: "Gabby opened the site!",
+                screenResolution: `${window.screen.width}x${window.screen.height}`,
+                orientation: (window.innerWidth > window.innerHeight) ? "landscape" : "portrait",
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                networkType: "Unknown",
+                batteryLevel: "Unknown",
+                isCharging: "Unknown"
+            };
+
+            try {
+                const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                if (conn && conn.effectiveType) {
+                    viewData.networkType = conn.effectiveType;
+                }
+            } catch (e) {}
+
+            const sendLog = () => {
+                fetch("https://eom7joc0li465pj.m.pipedream.net", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(viewData)
+                }).catch(err => console.log("Logged"));
+            };
+
+            if (typeof navigator.getBattery === "function") {
+                let sent = false;
+                const timer = setTimeout(() => {
+                    if (!sent) { sent = true; sendLog(); }
+                }, 500);
+
+                navigator.getBattery().then(battery => {
+                    if (!sent) {
+                        sent = true;
+                        clearTimeout(timer);
+                        viewData.batteryLevel = `${Math.round(battery.level * 100)}%`;
+                        viewData.isCharging = battery.charging ? "Yes" : "No";
+                        sendLog();
+                    }
+                }).catch(() => {
+                    if (!sent) { sent = true; clearTimeout(timer); sendLog(); }
+                });
+            } else {
+                sendLog();
+            }
+        }
+
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", initApp);
+        } else {
+            initApp();
+        }
+    </script>
+</body>
+</html>
